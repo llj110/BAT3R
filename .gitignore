@@ -1,0 +1,34 @@
+# Byte-compiled
+__pycache__/
+*.py[cod]
+*.so
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Data & Checkpoints
+*.pth
+*.ckpt
+data/
+tmp/
+
+# Results
+eval_results/
+eval_results_*/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+nohup.out
+
+# Jupyter
+.ipynb_checkpoints/
