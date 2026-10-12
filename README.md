@@ -27,6 +27,8 @@ confidence, and spatial relevance. The implementation extends
 
 | Resource | Link |
 | --- | --- |
+| Project website | [Method overview and results](https://llj110.github.io/bat3r/) |
+| Interactive demo | [Explore 27 saved reconstruction scenes](https://llj110.github.io/bat3r/#demo) |
 | Paper and reviews | [OpenReview](https://openreview.net/forum?id=MP758ZsHYv) |
 | Conference record | [NeurIPS 2026 poster](https://neurips.cc/virtual/2026/poster/153286) |
 | Code | [BAT3R repository](https://github.com/llj110/BAT3R) · [Core implementation](src/bat3r/) |
@@ -38,8 +40,11 @@ confidence, and spatial relevance. The implementation extends
 | Citation | [BibTeX](#citation) · [CITATION.cff](CITATION.cff) |
 | Questions and bugs | [GitHub Issues](https://github.com/llj110/BAT3R/issues) |
 
-The paper is linked through OpenReview. A separate BAT3R project website and
-arXiv identifier have not yet been confirmed. The checkpoint above is the
+The public project website includes an interactive explorer of saved server
+reconstructions, paired geometry comparisons, input-camera paths, and evaluation
+snapshots. The viewer displays sampled saved results; it does not run new GPU
+inference. The paper is linked through OpenReview; an arXiv identifier has not
+yet been confirmed. The checkpoint above is the
 upstream CUT3R starting model; see [checkpoint provenance](#checkpoint) before
 using it to reproduce paper results.
 
