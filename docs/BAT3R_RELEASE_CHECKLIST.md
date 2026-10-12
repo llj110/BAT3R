@@ -27,12 +27,19 @@
    Historical reports are not a fresh rerun of this renamed release.
 3. **Environment lock.** Record a tested dependency lock and CUDA/driver versions.
    The current requirements include unpinned upstream libraries.
-4. **Paper metadata.** Add the actual author list, citation, paper URL, and project
-   URL when confirmed; do not substitute placeholders for released artifacts.
+4. **Additional public materials.** The formal title, nine-author list, NeurIPS
+   record, OpenReview URL, BibTeX, and CITATION.cff are now included. A dedicated
+   project website, confirmed arXiv identifier, and result gallery remain to be
+   published or linked.
 5. **Baseline provenance.** Clearly separate upstream CUT3R/TTT3R runs from the
    modified repository's legacy mode names and runtime patches.
 6. **Dataset protocol.** Release sequence lists, sampling lengths, preprocessing
    settings, and aggregation conventions for each reported benchmark.
+
+7. **Name disambiguation.** A separate ECCV 2026 work uses the acronym BAT3R
+   for articulated-object reconstruction. Keep this project's full paper title
+   visible and review search/discovery branding before further public releases.
+   The other work is [Bootstrapping Articulated 3D Reconstruction from 2D Image Collections](https://github.com/jakubzadrozny/bat3r).
 
 Existing third-party license notices have been preserved. This update does not
 replace those notices with a new project-wide license.

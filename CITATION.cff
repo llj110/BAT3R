@@ -1,0 +1,51 @@
+cff-version: 1.2.0
+message: "If you use BAT3R, please cite the NeurIPS 2026 paper below."
+title: "BAT3R: Robust Online 3D Reconstruction with Bayesian Adaptive State Updates"
+type: software
+repository-code: "https://github.com/llj110/BAT3R"
+url: "https://openreview.net/forum?id=MP758ZsHYv"
+authors:
+  - family-names: Li
+    given-names: Lijian
+  - family-names: He
+    given-names: Yuanpeng
+  - family-names: Zheng
+    given-names: Yudian
+  - family-names: Huang
+    given-names: Chung-ju
+  - family-names: Li
+    given-names: Linyu
+  - family-names: Jin
+    given-names: Dongming
+  - family-names: Jiao
+    given-names: Wenpin
+  - family-names: Jin
+    given-names: Zhi
+  - family-names: Pun
+    given-names: Chi-Man
+preferred-citation:
+  type: conference-paper
+  title: "BAT3R: Robust Online 3D Reconstruction with Bayesian Adaptive State Updates"
+  conference:
+    name: "The Fortieth Annual Conference on Neural Information Processing Systems"
+  year: 2026
+  url: "https://openreview.net/forum?id=MP758ZsHYv"
+  authors:
+    - family-names: Li
+      given-names: Lijian
+    - family-names: He
+      given-names: Yuanpeng
+    - family-names: Zheng
+      given-names: Yudian
+    - family-names: Huang
+      given-names: Chung-ju
+    - family-names: Li
+      given-names: Linyu
+    - family-names: Jin
+      given-names: Dongming
+    - family-names: Jiao
+      given-names: Wenpin
+    - family-names: Jin
+      given-names: Zhi
+    - family-names: Pun
+      given-names: Chi-Man

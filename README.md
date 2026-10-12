@@ -1,7 +1,61 @@
-# BAT3R: Bayesian Adaptive Test-Time 3D Reconstruction
+# BAT3R: Robust Online 3D Reconstruction with Bayesian Adaptive State Updates
 
-Bayesian recurrent state adaptation for long-sequence 3D reconstruction,
-built on TTT3R, CUT3R, DUSt3R, and CroCo.
+**NeurIPS 2026**
+
+[![Paper on OpenReview](https://img.shields.io/badge/Paper-OpenReview-8c1b13)](https://openreview.net/forum?id=MP758ZsHYv)
+[![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-68438c)](https://neurips.cc/virtual/2026/poster/153286)
+[![Source checks](https://github.com/llj110/BAT3R/actions/workflows/bat3r-check.yml/badge.svg)](https://github.com/llj110/BAT3R/actions/workflows/bat3r-check.yml)
+
+[Lijian Li](https://openreview.net/profile?id=~Lijian_Li1),
+[Yuanpeng He](https://openreview.net/profile?id=~Yuanpeng_He1),
+[Yudian Zheng](https://openreview.net/profile?id=~Yudian_Zheng1),
+[Chung-ju Huang](https://openreview.net/profile?id=~Chung-ju_Huang1),
+[Linyu Li](https://openreview.net/profile?id=~Linyu_Li1),
+[Dongming Jin](https://openreview.net/profile?id=~Dongming_Jin1),
+[Wenpin Jiao](https://openreview.net/profile?id=~Wenpin_Jiao1),
+[Zhi Jin](https://openreview.net/profile?id=~Zhi_Jin1),
+[Chi-Man Pun](https://openreview.net/profile?id=~Chi-Man_Pun1)
+
+BAT3R adapts recurrent scene states during online 3D reconstruction. State
+Innovation Gating (SIG) anchors updates to the initial state, while Bayesian-guided
+Adaptive State Updating (BASU) combines historical uncertainty, observation
+confidence, and spatial relevance. The implementation extends
+[TTT3R](https://github.com/Inception3D/TTT3R) and
+[CUT3R](https://github.com/CUT3R/CUT3R).
+
+## Quick links
+
+| Resource | Link |
+| --- | --- |
+| Paper and reviews | [OpenReview](https://openreview.net/forum?id=MP758ZsHYv) |
+| Conference record | [NeurIPS 2026 poster](https://neurips.cc/virtual/2026/poster/153286) |
+| Code | [BAT3R repository](https://github.com/llj110/BAT3R) · [Core implementation](src/bat3r/) |
+| Starting checkpoint | [CUT3R 512 DPT download](https://drive.google.com/file/d/1Asz-ZB3FfpzZYwunhQvNPZEUA8XUNAYD/view) · [Upstream instructions](https://github.com/CUT3R/CUT3R#download-checkpoints) |
+| Example inputs | [Westlake video](examples/westlake.mp4) · [Taylor video](examples/taylor.mp4) |
+| Benchmarks and data | [Dataset sources and preparation](docs/BAT3R_DATASETS.md) · [Evaluation guide](eval/README.md) |
+| Implementation guide | [Code map](docs/BAT3R_CODEMAP.md) · [Release checklist](docs/BAT3R_RELEASE_CHECKLIST.md) |
+| Validation | [Source-check workflow](https://github.com/llj110/BAT3R/actions/workflows/bat3r-check.yml) · [CPU tests](tests/test_bat3r_release.py) |
+| Citation | [BibTeX](#citation) · [CITATION.cff](CITATION.cff) |
+| Questions and bugs | [GitHub Issues](https://github.com/llj110/BAT3R/issues) |
+
+The paper is linked through OpenReview. A separate BAT3R project website and
+arXiv identifier have not yet been confirmed. The checkpoint above is the
+upstream CUT3R starting model; see [checkpoint provenance](#checkpoint) before
+using it to reproduce paper results.
+
+## Contents
+
+- [BAT3R implementation](#bat3r-implementation)
+- [Installation](#installation)
+- [Checkpoint](#checkpoint)
+- [Inference](#inference)
+- [Static reconstruction renders](#static-reconstruction-renders)
+- [Datasets](#datasets)
+- [Evaluation](#evaluation)
+- [Validation](#validation)
+- [Citation](#citation)
+- [Acknowledgements and license notices](#acknowledgements-and-license-notices)
+- [Support and release status](#support-and-release-status)
 
 ## BAT3R implementation
 
@@ -20,6 +74,15 @@ BAT3R/
 ├── eval/                        # benchmark implementations
 └── tests/                       # CPU regression checks
 ```
+
+| Component | Source |
+| --- | --- |
+| Reconstruction model and SIG | [bat3r_model.py](src/bat3r/bat3r_model.py) |
+| Bayesian state fusion / BASU | [bat3r_update.py](src/bat3r/bat3r_update.py) |
+| Recurrent inference | [bat3r_inference.py](src/bat3r/bat3r_inference.py) |
+| Video demo and PLY export | [bat3r_demo.py](bat3r_demo.py) |
+| PNG rendering | [bat3r_reconstruct.py](bat3r_reconstruct.py) |
+| Benchmark launcher | [bat3r_eval.py](bat3r_eval.py) |
 
 See [the code map](docs/BAT3R_CODEMAP.md) for component locations and
 [the release checklist](docs/BAT3R_RELEASE_CHECKLIST.md) for remaining artifacts.
@@ -42,11 +105,17 @@ python setup.py build_ext --inplace
 cd ../../../..
 ```
 
+Dependencies are listed in [requirements.txt](requirements.txt). For installation
+reference, see [PyTorch](https://pytorch.org/get-started/locally/),
+[Conda](https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html),
+[Open3D](https://www.open3d.org/docs/release/getting_started.html), and
+[the upstream CUDA/RoPE instructions](https://github.com/CUT3R/CUT3R#installation).
 Dependencies are not fully version-locked; see the release checklist.
 
 ## Checkpoint
 
-Obtain `cut3r_512_dpt_4_64.pth` from the
+Download [`cut3r_512_dpt_4_64.pth`](https://drive.google.com/file/d/1Asz-ZB3FfpzZYwunhQvNPZEUA8XUNAYD/view)
+using the
 [official CUT3R checkpoint instructions](https://github.com/CUT3R/CUT3R#download-checkpoints)
 and place it under `src/`, or pass an external path with `--model_path` for
 inference and `--weights` for evaluation. This is an upstream starting checkpoint.
@@ -92,6 +161,23 @@ python bat3r_reconstruct.py \
 Use `filament` or `glfw` for Open3D rendering when available. See
 `python bat3r_reconstruct.py --help` for rendering options.
 
+## Datasets
+
+| Benchmark | Original provider | BAT3R setup |
+| --- | --- | --- |
+| 7-Scenes | [Microsoft Research](https://www.microsoft.com/en-us/research/project/rgb-d-dataset-7-scenes/) | [Preparation](docs/BAT3R_DATASETS.md) · [Multi-view loader](eval/mv_recon/data.py) |
+| TUM RGB-D | [Downloads](https://cvg.cit.tum.de/data/datasets/rgbd-dataset/download) | [Preprocessing](datasets_preprocess/long_prepare_tum.py) |
+| ScanNet | [Official download instructions](https://github.com/ScanNet/ScanNet#scannet-data) | [Preprocessing](datasets_preprocess/long_prepare_scannet.py) |
+| KITTI | [Odometry](https://www.cvlibs.net/datasets/kitti/eval_odometry.php) · [Depth](https://www.cvlibs.net/datasets/kitti/eval_depth.php?benchmark=depth_prediction) | [Preprocessing](datasets_preprocess/long_prepare_kitti.py) |
+| Bonn RGB-D Dynamic | [Dataset](https://www.ipb.uni-bonn.de/data/rgbd-dynamic-dataset/) | [Preprocessing](datasets_preprocess/long_prepare_bonn.py) |
+| Sintel | [MonST3R source and preparation links](https://github.com/Junyi42/monst3r/blob/main/data/evaluation_script.md#sintel) | [Depth metadata](eval/video_depth/metadata.py) |
+| Neural RGB-D (`NRGBD`) | [Project](https://dazinovic.github.io/neural-rgbd-surface-reconstruction/) · [Dataset ZIP](https://kaldir.vc.in.tum.de/neural_rgbd/neural_rgbd_data.zip) | [Preparation](docs/BAT3R_DATASETS.md) · [Multi-view loader](eval/mv_recon/data.py) |
+
+See [dataset resources](docs/BAT3R_DATASETS.md) for expected paths, projected
+7-Scenes depth, and inherited preparation recipes. Prepared sequence lengths
+and dataset keys are defined in the [pose metadata](eval/relpose/metadata.py)
+and [depth metadata](eval/video_depth/metadata.py).
+
 ## Evaluation
 
 ```bash
@@ -123,6 +209,24 @@ and launcher dispatch. Optional exact numerical parity uses an ignored copy of
 the pre-migration Bayesian module at `tests/_baseline_bayesian_ttt.py`.
 GitHub Actions checks Python syntax and portable launcher syntax without a GPU.
 
+## Citation
+
+If you use BAT3R in your research, please cite the
+[NeurIPS 2026 paper](https://openreview.net/forum?id=MP758ZsHYv):
+
+```bibtex
+@inproceedings{li2026bat3r,
+  title     = {BAT3R: Robust Online 3D Reconstruction with Bayesian Adaptive State Updates},
+  author    = {Li, Lijian and He, Yuanpeng and Zheng, Yudian and Huang, Chung-ju and
+               Li, Linyu and Jin, Dongming and Jiao, Wenpin and Jin, Zhi and Pun, Chi-Man},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2026},
+  url       = {https://openreview.net/forum?id=MP758ZsHYv}
+}
+```
+
+Machine-readable metadata is provided in [CITATION.cff](CITATION.cff).
+
 ## Acknowledgements and license notices
 
 Inherited components retain their original names and notices:
@@ -135,4 +239,15 @@ Inherited components retain their original names and notices:
 See [LICENSE](LICENSE) and the bundled third-party notices, including
 [src/croco/LICENSE](src/croco/LICENSE). The root file preserves upstream CUT3R
 CC BY-NC-SA 4.0 and TTT3R MIT notices; no Apache-2.0 project-wide grant is asserted.
-Paper and citation metadata will be added when confirmed.
+
+## Support and release status
+
+Report bugs or ask implementation questions through
+[GitHub Issues](https://github.com/llj110/BAT3R/issues). Include the command,
+checkpoint source, dataset variant, environment versions, and error output.
+
+The [release checklist](docs/BAT3R_RELEASE_CHECKLIST.md) tracks the remaining
+reproduction package, checkpoint checksums, environment lock, and benchmark
+protocols. A dedicated project website, confirmed arXiv URL, and illustrated
+result gallery are still pending. Paper results are not claimed to have been
+rerun by the namespace migration checks.

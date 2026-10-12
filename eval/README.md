@@ -6,6 +6,7 @@ remaining options to the corresponding existing evaluator.
 
 ## Data preparation
 
+See [official dataset downloads and BAT3R preparation links](../docs/BAT3R_DATASETS.md).
 Download benchmark data from its official source and prepare the directory
 layout expected by each evaluator. See [data preparation notes](eval.md),
 `eval/relpose/metadata.py`, `eval/video_depth/metadata.py`, and
