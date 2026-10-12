@@ -1,113 +1,138 @@
-<h2 align="center">BAT3R: Bayesian Adaptive Test-Time 3D Reconstruction</h2>
+# BAT3R: Bayesian Adaptive Test-Time 3D Reconstruction
 
-<h5 align="center">
+Bayesian recurrent state adaptation for long-sequence 3D reconstruction,
+built on TTT3R, CUT3R, DUSt3R, and CroCo.
 
-[![arXiv](https://img.shields.io/badge/Arxiv-XXXX.XXXXX-b31b1b.svg?logo=arXiv)](https://arxiv.org/abs/XXXX.XXXXX)
-[![Project Page](https://img.shields.io/badge/Project-Website-33728E.svg)](https://example.com)
+## BAT3R implementation
 
-</h5>
+```text
+BAT3R/
+├── bat3r_demo.py                 # inference and PLY export
+├── bat3r_reconstruct.py          # reconstruction and PNG rendering
+├── bat3r_eval.py                 # common benchmark launcher
+├── bat3r_run.sh                  # portable demo launcher
+├── src/bat3r/
+│   ├── bat3r_model.py            # recurrent reconstruction + global/pose gates
+│   ├── bat3r_update.py           # Bayesian fusion + adaptive process noise
+│   └── bat3r_inference.py        # sequence inference
+├── src/dust3r/                   # inherited utilities + compatibility imports
+├── src/croco/                    # inherited encoder/decoder components
+├── eval/                        # benchmark implementations
+└── tests/                       # CPU regression checks
+```
 
-<div align="center">
-TL;DR: Bayesian test-time adaptation for robust long-sequence 3D reconstruction.
-</div>
-<br>
+See [the code map](docs/BAT3R_CODEMAP.md) for component locations and
+[the release checklist](docs/BAT3R_RELEASE_CHECKLIST.md) for remaining artifacts.
 
-BAT3R extends test-time training for 3D reconstruction with a Bayesian recurrent state update mechanism, enabling robust long-sequence reconstruction with adaptive uncertainty estimation.
+## Installation
 
-## News
-
-- [2026.05] Code released.
-- [2026.XX] Paper released on arXiv.
-
-## Getting Started
-
-### Installation
+Run commands from the repository root, using Python 3.11 and a CUDA-compatible
+PyTorch installation:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/BAT3R.git
+git clone https://github.com/llj110/BAT3R.git
 cd BAT3R
 conda create -n bat3r python=3.11 cmake=3.14.0
 conda activate bat3r
 conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia
 pip install -r requirements.txt
 conda install "llvm-openmp<16"
-pip install evo open3d
-```
-
-Compile CUDA kernels for RoPE (from CroCo v2):
-```bash
-cd src/croco/models/curope/
+cd src/croco/models/curope
 python setup.py build_ext --inplace
-cd ../../../../
+cd ../../../..
 ```
 
-### Download Checkpoint
+Dependencies are not fully version-locked; see the release checklist.
 
-Download the pretrained checkpoint from [Releases](https://github.com/YOUR_USERNAME/BAT3R/releases):
+## Checkpoint
+
+Obtain `cut3r_512_dpt_4_64.pth` from the
+[official CUT3R checkpoint instructions](https://github.com/CUT3R/CUT3R#download-checkpoints)
+and place it under `src/`, or pass an external path with `--model_path` for
+inference and `--weights` for evaluation. This is an upstream starting checkpoint.
+Exact BAT3R experiment checkpoint provenance is still needed for reproducing
+reported results; see the release checklist.
+
+## Inference
+
 ```bash
-cd src
-# Download cut3r_512_dpt_4_64.pth
-cd ..
-```
-
-### Inference Demo
-
-```bash
-CUDA_VISIBLE_DEVICES=0 python demo.py \
+CUDA_VISIBLE_DEVICES=0 python bat3r_demo.py \
     --model_path src/cut3r_512_dpt_4_64.pth \
     --seq_path examples/westlake.mp4 \
-    --size 512 --output_dir tmp/output \
-    --model_update_type bat3r \
-    --frame_interval 1 --reset_interval 100 \
-    --downsample_factor 100 --vis_threshold 6.0
+    --size 512 --output_dir tmp/bat3r \
+    --model_update_type bat3r
 ```
 
-### Key Arguments
+The demo writes per-frame artifacts and a merged `video_merged.ply` with camera
+metadata. `--seq_path` accepts a video or image directory.
 
-| Argument | Description | Default |
-|----------|-------------|---------|
-| `--model_path` | Path to checkpoint | required |
-| `--seq_path` | Input video or image folder | required |
-| `--size` | Image resolution | 512 |
-| `--model_update_type` | State update: `bat3r`, `ttt3r`, `none` | `bat3r` |
-| `--frame_interval` | Process every N frames | 1 |
-| `--reset_interval` | Reset state every N frames | 100 |
-| `--vis_threshold` | Confidence threshold | 5.0 |
+| Argument | Default | Purpose |
+| --- | --- | --- |
+| `--model_path` | `src/cut3r_512_dpt_4_64.pth` | Checkpoint path |
+| `--model_update_type` | `bat3r` | `bat3r`, legacy `ttt3r`, or reference `cut3r` |
+| `--size` | `512` | Input resolution |
+| `--frame_interval` | `1` | Frame sampling interval |
+| `--reset_interval` | `1000000` | State reset interval |
+| `--vis_threshold` | `1.5` | Point confidence threshold |
+
+`bash bat3r_run.sh ...` forwards arguments to the demo. Set `PYTHON` to use
+an existing Python environment. The old `demo.py` and `run.sh` names still work.
+
+## Static reconstruction renders
+
+```bash
+python bat3r_reconstruct.py \
+    --model_path src/cut3r_512_dpt_4_64.pth \
+    --seq_path examples/westlake.mp4 \
+    --model_update_type bat3r --output_dir tmp/bat3r_render \
+    --render_dir tmp/bat3r_render/png --render_views 8 \
+    --render_engine matplotlib
+```
+
+Use `filament` or `glfw` for Open3D rendering when available. See
+`python bat3r_reconstruct.py --help` for rendering options.
 
 ## Evaluation
 
-See [eval/README.md](eval/README.md) for evaluation on 7Scenes, KITTI, Bonn, TUM, and NRGBD benchmarks.
-
-## Method
-
-BAT3R introduces three key components on top of the TTT3R framework:
-
-1. **Bayesian Recurrent State Update**: Maintains state uncertainty via a Kalman-inspired update rule that adaptively weights new observations against accumulated evidence, with learnable process noise and observation variance.
-
-2. **Global Scene Rectification**: EMA-based scene context that accumulates global features over time to rectify drift during long sequences.
-
-3. **Pose-Delta Gate**: Temporal stabilization module that gates state updates based on relative camera motion, preventing instability during rapid viewpoint changes.
-
-## Acknowledgements
-
-This project is built upon the following excellent works:
-
-- [TTT3R](https://github.com/Inception3D/TTT3R) - 3D Reconstruction as Test-Time Training
-- [CUT3R](https://github.com/CUT3R/CUT3R)
-- [DUSt3R](https://github.com/naver/dust3r)
-- [MonST3R](https://github.com/Junyi42/monst3r)
-- [CroCo](https://github.com/naver/croco)
-
-## Citation
-
-```bibtex
-@article{bat3r2026,
-  title={BAT3R: Bayesian Adaptive Test-Time 3D Reconstruction},
-  journal={arXiv preprint arXiv:XXXX.XXXXX},
-  year={2026}
-}
+```bash
+python bat3r_eval.py --task relpose \
+    --weights src/cut3r_512_dpt_4_64.pth \
+    --eval_dataset tum_s1_90 --size 512
 ```
 
-## License
+The launcher defaults to `--model_update_type bat3r` and stores outputs under
+`eval_results/bat3r/<task>`. Use a separate `--output_dir` for every dataset,
+configuration, and seed to preserve results. Add `--dry-run` to inspect the
+forwarded arguments without model execution.
 
-This project is released under the Apache License 2.0. See [LICENSE](LICENSE) for details.
+See [evaluation instructions](eval/README.md) for pose, depth, reconstruction,
+data preparation, and benchmark-specific flags.
+
+The historical `ttt3r` mode is an alias for modified BAT3R paths in this
+repository. It is not an independent upstream TTT3R baseline. The `cut3r` mode
+selects the existing reference update path in this modified model.
+
+## Validation
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+CPU tests check compatibility imports, state-dict loading, confidence layouts,
+and launcher dispatch. Optional exact numerical parity uses an ignored copy of
+the pre-migration Bayesian module at `tests/_baseline_bayesian_ttt.py`.
+GitHub Actions checks Python syntax and portable launcher syntax without a GPU.
+
+## Acknowledgements and license notices
+
+Inherited components retain their original names and notices:
+[TTT3R](https://github.com/Inception3D/TTT3R),
+[CUT3R](https://github.com/CUT3R/CUT3R),
+[DUSt3R](https://github.com/naver/dust3r),
+[MonST3R](https://github.com/Junyi42/monst3r), and
+[CroCo](https://github.com/naver/croco).
+
+See [LICENSE](LICENSE) and the bundled third-party notices, including
+[src/croco/LICENSE](src/croco/LICENSE). The root file preserves upstream CUT3R
+CC BY-NC-SA 4.0 and TTT3R MIT notices; no Apache-2.0 project-wide grant is asserted.
+Paper and citation metadata will be added when confirmed.

@@ -32,3 +32,7 @@ nohup.out
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Local parity reference and deployment snapshots
+tests/_baseline_bayesian_ttt.py
+.bat3r_backups/

@@ -153,7 +153,7 @@ def eval_pose_estimation(args, model, save_dir=None):
 
 
 def eval_pose_estimation_dist(args, model, img_path, save_dir=None, mask_path=None):
-    from dust3r.inference import inference, inference_recurrent, inference_recurrent_lighter
+    from bat3r.bat3r_inference import inference, inference_recurrent, inference_recurrent_lighter
 
     metadata = dataset_metadata.get(args.eval_dataset)
     anno_path = metadata.get("anno_path", None)
@@ -346,7 +346,7 @@ if __name__ == "__main__":
     add_path_to_dust3r(args.weights)
     from dust3r.utils.image import load_images_for_eval as load_images
     from dust3r.post_process import estimate_focal_knowing_depth
-    from dust3r.model import ARCroco3DStereo
+    from bat3r.bat3r_model import ARCroco3DStereo
     from dust3r.utils.camera import pose_encoding_to_camera
     from dust3r.utils.geometry import weighted_procrustes, geotrf
 

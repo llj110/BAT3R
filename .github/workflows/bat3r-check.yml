@@ -1,0 +1,13 @@
+name: BAT3R source checks
+on: [push, pull_request]
+jobs:
+  syntax-and-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m compileall -q src bat3r_demo.py bat3r_reconstruct.py bat3r_eval.py demo.py render_video_recon.py eval
+      - run: python bat3r_eval.py --task relpose --dry-run --eval_dataset tum_s1_90
+      - run: bash -n bat3r_run.sh run.sh

@@ -125,7 +125,7 @@ def main(args):
     device = accelerator.device
     model_name = args.model_name
     # if model_name == "ours" or model_name == "cut3r":
-    from dust3r.model import ARCroco3DStereo
+    from bat3r.bat3r_model import ARCroco3DStereo
     from eval.mv_recon.criterion import Regr3D_t_ScaleShiftInv, L21
     from dust3r.utils.geometry import geotrf
     from copy import deepcopy

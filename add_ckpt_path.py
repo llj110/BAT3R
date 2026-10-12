@@ -1,9 +1,12 @@
+"""Locate the repository code independently of checkpoint storage."""
 import sys
-import os
-import os.path as path
+from pathlib import Path
 
 
 def add_path_to_dust3r(ckpt):
-    HERE_PATH = os.path.dirname(os.path.abspath(ckpt))
-    # workaround for sibling import
-    sys.path.insert(0, HERE_PATH)
+    # Retain the historical helper name for upstream callers.
+    paths = [Path(ckpt).resolve().parent, Path(__file__).resolve().parent / "src"]
+    for directory in paths:
+        value = str(directory)
+        if value not in sys.path:
+            sys.path.insert(0, value)

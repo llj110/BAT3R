@@ -13,7 +13,6 @@ tensorboard
 pyglet<2
 huggingface-hub[torch]>=0.22
 viser
-gradio
 lpips
 hydra-core
 pillow==10.3.0
@@ -21,3 +20,7 @@ h5py
 accelerate
 transformers
 scikit-learn
+imageio
+scikit-image
+open3d
+evo

@@ -183,7 +183,7 @@ def _icp_threshold(name_data: str) -> float:
 def main(args):
     print(f"[paths] weights={args.weights}")
     add_path_to_dust3r(args.weights)
-    from dust3r.model import ARCroco3DStereo
+    from bat3r.bat3r_model import ARCroco3DStereo
     from eval.mv_recon.criterion import Regr3D_t_ScaleShiftInv, L21
     from dust3r.utils.geometry import geotrf
 
