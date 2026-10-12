@@ -12,6 +12,8 @@
 - ImageIO, scikit-image, Open3D, and evo dependencies are explicitly listed.
 - Checkpoint storage outside `src` no longer prevents finding repository code.
 - Compatibility imports, CPU regression checks, and source-check CI are included.
+- The official NeurIPS 2026 Poster implementation, project homepage, and two
+  automatically rotating reconstruction previews are linked prominently.
 - README license text now refers to the existing notices rather than claiming
   Apache-2.0, which is not the license text bundled in this repository.
 
@@ -28,9 +30,9 @@
 3. **Environment lock.** Record a tested dependency lock and CUDA/driver versions.
    The current requirements include unpinned upstream libraries.
 4. **Additional public materials.** The formal title, nine-author list, NeurIPS
-   record, OpenReview URL, BibTeX, and CITATION.cff are now included. A dedicated
-   project website, confirmed arXiv identifier, and result gallery remain to be
-   published or linked.
+   record, OpenReview URL, BibTeX, and CITATION.cff are now included. The
+   [project website](https://llj110.github.io/bat3r/) and two-scene README gallery
+   are published. A confirmed arXiv identifier remains to be linked.
 5. **Baseline provenance.** Clearly separate upstream CUT3R/TTT3R runs from the
    modified repository's legacy mode names and runtime patches.
 6. **Dataset protocol.** Release sequence lists, sampling lengths, preprocessing

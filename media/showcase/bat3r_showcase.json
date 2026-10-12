@@ -1,0 +1,40 @@
+{
+  "project": "BAT3R",
+  "source_note": "Saved benchmark exports, also displayed on the project website. These qualitative previews are not a new inference run or a claim of the best paper configuration.",
+  "scenes": [
+    {
+      "scene": "7s-chess_seq-03",
+      "dataset": "7-Scenes",
+      "name": "chess / seq-03",
+      "input_frames": 500,
+      "displayed_points": 70000,
+      "source": "https://llj110.github.io/bat3r/assets/data/7s-chess_seq-03/bat3r.bin",
+      "source_sha256": "9aafa40f363ab676e82312d2c7864ff58eb2b32e8c459e9b29f6043f756c6519",
+      "metadata": "https://llj110.github.io/bat3r/assets/data/7s-chess_seq-03/scene.json",
+      "gif": "bat3r_7s-chess_seq-03_rotate.gif",
+      "animation_frames": 120,
+      "duration_ms": 100,
+      "loop": "infinite",
+      "projection": "fixed orthographic camera orbit",
+      "sampling": "Deterministic uniform index sampling; finite XYZ points only; float32 positions and original RGB.",
+      "alignment": "Saved scale/shift-aligned benchmark reconstruction in world coordinates. No new ICP or method-specific web alignment."
+    },
+    {
+      "scene": "7s-stairs_seq-01",
+      "dataset": "7-Scenes",
+      "name": "stairs / seq-01",
+      "input_frames": 250,
+      "displayed_points": 70000,
+      "source": "https://llj110.github.io/bat3r/assets/data/7s-stairs_seq-01/bat3r.bin",
+      "source_sha256": "7f6c8776a6a7c2aedaa18120046e6b5bf4cea092dd89a3040aa945c8d9922c62",
+      "metadata": "https://llj110.github.io/bat3r/assets/data/7s-stairs_seq-01/scene.json",
+      "gif": "bat3r_7s-stairs_seq-01_rotate.gif",
+      "animation_frames": 120,
+      "duration_ms": 100,
+      "loop": "infinite",
+      "projection": "fixed orthographic camera orbit",
+      "sampling": "Deterministic uniform index sampling; finite XYZ points only; float32 positions and original RGB.",
+      "alignment": "Saved scale/shift-aligned benchmark reconstruction in world coordinates. No new ICP or method-specific web alignment."
+    }
+  ]
+}

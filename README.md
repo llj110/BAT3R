@@ -1,7 +1,8 @@
 # BAT3R: Robust Online 3D Reconstruction with Bayesian Adaptive State Updates
 
-**NeurIPS 2026**
+**Official implementation · Accepted at NeurIPS 2026 (Poster)**
 
+[![Project website](https://img.shields.io/badge/Project-Website-5363bd)](https://llj110.github.io/bat3r/)
 [![Paper on OpenReview](https://img.shields.io/badge/Paper-OpenReview-8c1b13)](https://openreview.net/forum?id=MP758ZsHYv)
 [![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-68438c)](https://neurips.cc/virtual/2026/poster/153286)
 [![Source checks](https://github.com/llj110/BAT3R/actions/workflows/bat3r-check.yml/badge.svg)](https://github.com/llj110/BAT3R/actions/workflows/bat3r-check.yml)
@@ -22,6 +23,27 @@ Adaptive State Updating (BASU) combines historical uncertainty, observation
 confidence, and spatial relevance. The implementation extends
 [TTT3R](https://github.com/Inception3D/TTT3R) and
 [CUT3R](https://github.com/CUT3R/CUT3R).
+
+**[Project homepage](https://llj110.github.io/bat3r/) · [Paper](https://openreview.net/forum?id=MP758ZsHYv) · [NeurIPS 2026 Poster](https://neurips.cc/virtual/2026/poster/153286) · [Interactive 3D demo](https://llj110.github.io/bat3r/#demo)**
+
+## 3D showcase
+
+Two saved BAT3R reconstructions: **Chess (500 input frames)** and
+**Stairs (250 input frames)**. The previews
+rotate automatically in a continuous loop. **Click either scene to open its
+interactive 3D view**, with automatic rotation enabled; drag to orbit and scroll
+to zoom.
+
+| Chess · 7-Scenes | Stairs · 7-Scenes |
+| :---: | :---: |
+| [![Automatically rotating BAT3R reconstruction of chess, seq-03](media/showcase/bat3r_7s-chess_seq-03_rotate.gif)](https://llj110.github.io/bat3r/?scene=7s-chess_seq-03&compare=none&rotate=1#demo) | [![Automatically rotating BAT3R reconstruction of stairs, seq-01](media/showcase/bat3r_7s-stairs_seq-01_rotate.gif)](https://llj110.github.io/bat3r/?scene=7s-stairs_seq-01&compare=none&rotate=1#demo) |
+| [Explore chess in 3D ↗](https://llj110.github.io/bat3r/?scene=7s-chess_seq-03&compare=none&rotate=1#demo) | [Explore stairs in 3D ↗](https://llj110.github.io/bat3r/?scene=7s-stairs_seq-01&compare=none&rotate=1#demo) |
+
+These qualitative previews use the same saved, sampled point clouds as the
+project website, preserving their positions and original RGB. GitHub Markdown
+displays animated previews; interactive WebGL runs on the linked project page.
+See [preview sources and checksums](media/showcase/bat3r_showcase.json) and
+[the preview renderer](tools/bat3r_render_showcase.py).
 
 ## Quick links
 
@@ -50,6 +72,7 @@ using it to reproduce paper results.
 
 ## Contents
 
+- [3D showcase](#3d-showcase)
 - [BAT3R implementation](#bat3r-implementation)
 - [Installation](#installation)
 - [Checkpoint](#checkpoint)
@@ -253,6 +276,6 @@ checkpoint source, dataset variant, environment versions, and error output.
 
 The [release checklist](docs/BAT3R_RELEASE_CHECKLIST.md) tracks the remaining
 reproduction package, checkpoint checksums, environment lock, and benchmark
-protocols. A dedicated project website, confirmed arXiv URL, and illustrated
-result gallery are still pending. Paper results are not claimed to have been
-rerun by the namespace migration checks.
+protocols. The [project website](https://llj110.github.io/bat3r/) and the
+[3D showcase](#3d-showcase) are available; a confirmed arXiv URL remains pending.
+Paper results are not claimed to have been rerun by the namespace migration checks.
